@@ -498,7 +498,11 @@ typedef struct SPIFFS_PACKED
   // common page header
   spiffs_page_header p_hdr;
   // alignment
+#ifdef SPIFFS_OLD_ALIGNMENT
+  u8_t _align[4 - (sizeof(spiffs_page_header)&3)==0 ? 4 : (sizeof(spiffs_page_header)&3)];
+#else
   u8_t _align[4 - ((sizeof(spiffs_page_header)&3)==0 ? 4 : (sizeof(spiffs_page_header)&3))];
+#endif
   // size of object
   u32_t size;
   // type of object
@@ -514,7 +518,12 @@ typedef struct SPIFFS_PACKED
 // object index page header
 typedef struct SPIFFS_PACKED {
  spiffs_page_header p_hdr;
+#ifdef SPIFFS_OLD_ALIGNMENT
+ u8_t _align[4 - (sizeof(spiffs_page_header)&3)==0 ? 4 : (sizeof(spiffs_page_header)&3)];
+#else
  u8_t _align[4 - ((sizeof(spiffs_page_header)&3)==0 ? 4 : (sizeof(spiffs_page_header)&3))];
+#endif
+
 } spiffs_page_object_ix;
 
 // callback func for object lookup visitor
